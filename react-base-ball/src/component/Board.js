@@ -1,36 +1,57 @@
 import React, {useState} from 'react'
 import Number from "./Number";
 import Indicator from "./Indicator";
-import NumberGen, {generateUniqueRandoms} from "./NumberGen";
+import {generateUniqueRandoms} from "./NumberGen";
 
 const Board = () => {
+    const [userNumbers, setUserNumbers] = useState([]);
     const [numbers, setNumbers] = useState([]);
     const renderNumber = (num) => {
         return <Number value={num} onClick={() => click(num)}></Number>
     }
 
     const click = (num) => {
-        if (numbers.includes(num)) {
+        if (userNumbers.includes(num)) {
             return;
         }
-        if (numbers.length < 3) {
-            const newNumbers = [...numbers, num]
-            setNumbers(newNumbers);
+        if (userNumbers.length < 3) {
+            const newNumbers = [...userNumbers, num]
+            setUserNumbers(newNumbers);
         }
         console.log(numbers);
     }
 
     const reset = () => {
-        setNumbers([]);
+        setUserNumbers([]);
+    }
+
+    const generateNumber = () => {
+        const newNumbers = generateUniqueRandoms(3);
+        setNumbers(newNumbers);
+    };
+
+    const compare = () => {
+
     }
 
     return (
         <div>
 
-            <NumberGen num={3}></NumberGen>
+            {/*생성된 숫자*/}
             <div>
                 <Indicator numbers={numbers}></Indicator>
             </div>
+
+            <div>
+                <button onClick={generateNumber}>숫자 생성</button>
+                {/*<button onClick={() => compare(userNumber)}>비교</button>*/}
+                <div>
+                    {userNumbers.map((num, idx) => (
+                        <strong key={idx}>{num} </strong>
+                    ))}
+                </div>
+            </div>
+
             <div>
                 <button onClick={reset}>resetNumbers</button>
             </div>
@@ -52,6 +73,7 @@ const Board = () => {
             <div>
                 {renderNumber(0)}
             </div>
+            <button onClick={compare}>제출</button>
         </div>
     )
 }

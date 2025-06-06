@@ -15,13 +15,21 @@ export const generateUniqueRandoms = (count) => {
 const NumberGen = (num) => {
     const [numbers, setNumbers] = useState(generateUniqueRandoms(num));
     const handleClick = () => {
-        const newNumbers = generateUniqueRandoms(3);
+        const newNumbers = generateUniqueRandoms(num.num);
         setNumbers(newNumbers);
     };
+
+
+
+    const compare = (userNumber) => {
+        console.log(userNumber);
+    }
+
 
     return (
         <div>
             <button onClick={handleClick}>숫자 생성</button>
+            {/*<button onClick={() => compare(userNumber)}>비교</button>*/}
             <div>
                 {numbers.map((num, idx) => (
                     <strong key={idx}>{num} </strong>
@@ -30,5 +38,6 @@ const NumberGen = (num) => {
         </div>
     );
 }
+
 
 export default NumberGen;
