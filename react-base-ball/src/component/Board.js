@@ -18,7 +18,7 @@ const Board = () => {
             const newNumbers = [...userNumbers, num]
             setUserNumbers(newNumbers);
         }
-        console.log(numbers);
+        console.log(userNumbers);
     }
 
     const reset = () => {
@@ -30,8 +30,28 @@ const Board = () => {
         setNumbers(newNumbers);
     };
 
-    const compare = () => {
+    const compare = (numbers, userNumbers) => {
+        console.log(numbers);
+        console.log(userNumbers);
+        let ball = 0;
+        let strike = 0;
+        if (numbers.length < 3 || userNumbers.length < 3) {
+            return;
+        }
 
+        for (let i = 0; i < userNumbers.length; i++) {
+            if (userNumbers[i] === numbers[i]) {
+                strike++;
+                continue;
+            }
+            if (numbers.includes(userNumbers[i])) {
+                ball++;
+            }
+        }
+        console.log(ball);
+        console.log(strike);
+
+        return ball + " 볼 " + strike + " 스트라이크";
     }
 
     return (
@@ -45,12 +65,16 @@ const Board = () => {
             <div>
                 <button onClick={generateNumber}>숫자 생성</button>
                 {/*<button onClick={() => compare(userNumber)}>비교</button>*/}
-                <div>
-                    {userNumbers.map((num, idx) => (
-                        <strong key={idx}>{num} </strong>
-                    ))}
-                </div>
+
+                <Indicator numbers={userNumbers}></Indicator>
+                {/*<div>*/}
+                {/*    {userNumbers.map((num, idx) => (*/}
+                {/*        <strong key={idx}>{num} </strong>*/}
+                {/*    ))}*/}
+                {/*</div>*/}
             </div>
+
+            <div>점수 : {compare(numbers, userNumbers)}</div>
 
             <div>
                 <button onClick={reset}>resetNumbers</button>
@@ -73,7 +97,7 @@ const Board = () => {
             <div>
                 {renderNumber(0)}
             </div>
-            <button onClick={compare}>제출</button>
+            <button onClick={() => compare(numbers, userNumbers)}>제출</button>
         </div>
     )
 }
