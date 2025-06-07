@@ -1,0 +1,12 @@
+.post-info {
+    background-color:#00FF00;
+    border:solid 1px black;
+}
+
+.post-child {
+    padding:0 50px;
+}
+
+table {
+    border-collapse:collapse;
+}
