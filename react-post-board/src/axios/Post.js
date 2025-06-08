@@ -25,10 +25,22 @@ export const writePosts = async (post) => {
     }
 }
 
-export const getPosts = async () => {
+export const getPosts = async (page, pageSize) => {
+    try {
+        const res = await axios.get(`http://localhost:8080/posts/${page}/${pageSize}`);
+        console.log("getPosts called")
+        console.log(res);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
+export const getPostsDefault = async () => {
     try {
         const res = await axios.get("http://localhost:8080/posts");
         console.log("getPosts called")
+        console.log(res);
         return res.data;
     } catch (error) {
         console.log(error);

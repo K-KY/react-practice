@@ -4,7 +4,6 @@ import {getPosts, writePosts} from "../axios/Post";
 import {useNavigate} from "react-router-dom";
 
 
-
 const WriteBoard = () => {
     const navi = useNavigate();
     const [posts, setPosts] = useState({
@@ -12,6 +11,7 @@ const WriteBoard = () => {
         contents: "",
         author: "default",
     });
+
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -48,51 +48,98 @@ const WriteBoard = () => {
                 value={posts.author}
                 onChange={handleChange}
             />
-            <input type="submit" value="Save" />
+            <input type="submit" value="Save"/>
         </form>
     )
 }
 
 const Board = () => {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState([]);//게시물
+    const [totalPages, setTotalPages] = useState(0);//총 페이지 수
+    const [pageSize, setPageSize] = useState(50);//불러올 페이지 게시물 수
+    const [page, setPage] = useState(0);// 현재 페이지
+
 
     useEffect(() => {
-        getPosts().then((data) => {
+        getPosts(page, pageSize).then((data) => {
             if (data) {
-                setPosts(data);
+                setPosts(data.content);
+                setTotalPages(data.totalPages);
+                console.log(data.totalPages);
             }
         });
-    }, []);
+    }, [page, pageSize]);
 
+    const pageSizeChange = (e) => {
+        setPageSize(Number(e.target.value));
+        setPage(0);
 
+    }
 
     return (
-        <table>
-            <thead className={"post-header"}>
-            <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>내용</th>
-                <th>작성자</th>
-                <th>작성일</th>
-            </tr>
-            </thead>
+        <>
+            <table>
+                <thead className={"post-header"}>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                </tr>
+                <tr>
+                    <td> 페이지 수 : {totalPages}</td>
+                    <td>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            pageSizeChange(e)
+                        }} value={10}>10개
+                        </button>
+                    </td>
+                    <td>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            pageSizeChange(e)
+                        }} value={50}>50개
+                        </button>
+                    </td>
+                    <td>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            pageSizeChange(e)
+                        }} value={100}>100개
+                        </button>
+                    </td>
+                </tr>
+                </thead>
 
-            <tbody className="post-body">
-            {posts.map((post, index) => {
-                return (
-                    <tr className={"post-info"} onClick={() => console.log("click")} key={post["post-number"]}>
-                        <td className={"post-child"}>{post["postId"]}</td>
-                        <td className={"post-child"}>{post["title"]}</td>
-                        <td className={"post-child"}>{post["content"]}</td>
-                        <td className={"post-child"}>{post["author"]}</td>
-                        <td className={"post-child"}>{post["createdAt"]}</td>
-                    </tr>
-                )
-            })}
-            </tbody>
-        </table>
+                <tbody className="post-body">
+                {posts.map((post, index) => {
+                    return (
+                        <tr className={"post-info"} onClick={() => console.log("click")} key={post["postId"]}>
+                            <td className={"post-child"}>{post["postId"]}</td>
+                            <td className={"post-child"}>{post["title"]}</td>
+                            <td className={"post-child"}>{post["content"]}</td>
+                            <td className={"post-child"}>{post["author"]}</td>
+                            <td className={"post-child"}>{post["createdAt"]}</td>
+                        </tr>
+                    )
+                })}
+                </tbody>
+            </table>
+            <div className="pagination">
+                {Array.from({length: totalPages}, (_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setPage(i)}
+                        style={{fontWeight: page === i ? "bold" : "normal"}}
+                    >
+                        {i + 1}
+                    </button>
+                ))}
+            </div>
 
+        </>
     )
 }
 

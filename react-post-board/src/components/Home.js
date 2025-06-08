@@ -9,7 +9,9 @@ function Home() {
     return (
         <div className='App'>
             <button onClick={() => getTest()}>Test</button>
-            <button onClick={() => getTest()}><Link to={"/write-post"}>글 작성</Link></button>
+
+            <Link to={"/write-post"}><button>글 작성</button></Link>
+            <Link to={"/"}><button>Home</button></Link>
 
             <Routes>
                 <Route path="/" element={<Board/>}> /</Route>
