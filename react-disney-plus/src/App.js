@@ -4,6 +4,8 @@ import {Route, Routes} from "react-router-dom";
 import styled from "styled-components";
 import Banner from "./components/Banner";
 import Category from "./components/Category";
+import Row from "./components/Row";
+import requests from "./api/requests";
 
 function App() {
     return (
@@ -12,6 +14,10 @@ function App() {
                 <NavView></NavView>
                 <Banner />
                 <Category></Category>
+                <Row title={"Trending Now"} id={"trend"} fetchURL={requests.fetchTrendingList}></Row>
+                <Row title={"Top Rated"} id={"topRated"} fetchURL={requests.fetchTopRated}></Row>
+                <Row title={"Actions"} id={"actions"} fetchURL={requests.fetchActionMovie}></Row>
+                <Row title={"Comedy"} id={"comedy"} fetchURL={requests.fetchComedyMovie}></Row>
                 <Routes>
                     <Route path={"/"}></Route>
                 </Routes>

@@ -1,13 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useCallback, useEffect, useState} from 'react';
+import axios from "../api/axios";
+import "./Row.css"
 
-Row.propTypes = {
+const Row = ({title, id, fetchURL}) => {
+    const [movies, setMovies] = useState([])
 
-};
 
-function Row(props) {
+    const fetchMovie = useCallback(async () => {
+            const response = await axios.get(fetchURL);
+            setMovies(response.data.results);
+        }, [fetchURL]
+    );
+
+    useEffect(() => {
+        fetchMovie();
+    }, [fetchMovie]);
+
     return (
-        <div>ROW</div>
+        <div>ROW
+            <h1>{title}</h1>
+            <div className={"slider"}>
+                <div className={"slider__arrow-left"}>
+                    <span className={"arrow"}>
+                        {"<"}
+                    </span>
+                </div>
+                <div id={id} className={"row__posters"}>
+                    {movies.map(movie => (
+                        <img className={"row__poster"} key={movie.id} src={`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`}
+                             alt={movie.name}/>
+                    ))}
+                </div>
+
+                <div className={"slider__arrow-right"}>
+                    <span className={"arrow"}>
+                        {">"}
+                    </span>
+                </div>
+            </div>
+        </div>
     );
 }
 
